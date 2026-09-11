@@ -1,0 +1,14 @@
+export type Severity = 'critical' | 'high' | 'medium' | 'low' | 'informational'
+export type Status = 'New' | 'Investigating' | 'Resolved' | 'False Positive'
+export interface User {id:string; name:string; email:string; role:'admin'|'analyst'|'viewer'; active:boolean}
+export interface Page<T> {items:T[];total:number;page:number;page_size:number}
+export interface SecurityEvent {event_id:string;timestamp:string;source_ip:string|null;hostname:string;event_type:string;message:string}
+export interface Alert {alert_id:string;title:string;description:string;timestamp:string;severity:Severity;risk_score:number;source_ip:string|null;destination_ip:string|null;affected_host:string;username:string|null;event_type:string;category:string;detection_rule:string;technique_id:string;status:Status;assigned_to:string|null;evidence:{event_ids:string[];matching_count:number;distinct_ports:number;affected_accounts:number;window_seconds:number;trigger_message:string;origin:string};risk_factors:{factor:string;points:number}[];notes?:{id:string;text:string;user_id:string;timestamp:string}[];technique?:{tactic:string;technique_name:string};events?:SecurityEvent[]}
+export interface Incident {incident_id:string;title:string;description:string;severity:Severity;status:Status;created_at:string;updated_at:string;assigned_analyst:string|null;affected_assets:string[];resolution:string;related_alerts?:Alert[];timeline?:{id:string;action:string;note:string;timestamp:string;user_id:string}[]}
+export interface Asset {id:string;hostname:string;operating_system:string;ip_address:string;agent_status:string;last_seen:string;sensitivity:number;number_of_alerts:number;risk_score:number}
+export interface Rule {id:string;title:string;enabled:boolean;definition:{description:string;level:Severity;author:string;falsepositives:string[];tags:string[];sentinel:{kind:string;threshold:number;window_seconds:number;technique_id:string};detection:unknown}}
+export interface Count {name:string;count:number}
+export interface Analytics {total_alerts:number;severity:Record<Severity,number>;alerts_today:number;active_incidents:number;resolved_incidents:number;monitored_devices:number;total_events:number;trend:{date:string;total:number;critical:number;high:number}[];categories:Count[];top_ips:Count[];top_hosts:Count[];top_users:Count[];detections:Count[];mttr_hours:number|null;days:number}
+export interface Explanation {provider:string;generated_by:string;observed_evidence:Alert['evidence'];interpretation:string;possible_impact:string;investigation:string[];recommendations:string[];limitations:string}
+export interface Settings {demo_mode:boolean;registration_enabled:boolean;environment:string;ai_provider:string;integrations:Record<string,string>;access_token_minutes:number;rule_format:string}
+export interface Audit {id:string;user:string;action:string;target:string;timestamp:string;source_ip:string}

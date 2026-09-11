@@ -1,0 +1,31 @@
+{
+  "title": "Wazuh security alert",
+  "id": "wazuh_alert",
+  "description": "Wazuh emitted an elevated security alert.",
+  "author": "SentinelAI",
+  "level": "medium",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "wazuh_alert"
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Sensor-specific behavior; technique is provisional and must be reviewed"
+  ],
+  "tags": [
+    "attack.t1082"
+  ],
+  "sentinel": {
+    "kind": "single",
+    "threshold": 1,
+    "window_seconds": 300,
+    "category": "Discovery",
+    "technique_id": "T1082",
+    "technique_name": "System Information Discovery",
+    "tactic": "Discovery"
+  }
+}

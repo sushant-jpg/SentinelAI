@@ -1,0 +1,31 @@
+{
+  "title": "Successful login after failures",
+  "id": "suspicious_login",
+  "description": "Successful authentication after five failures from the same source for the same account.",
+  "author": "SentinelAI",
+  "level": "high",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "login_success"
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Legitimate user correcting a forgotten password"
+  ],
+  "tags": [
+    "attack.t1078"
+  ],
+  "sentinel": {
+    "kind": "success_after_failures",
+    "threshold": 5,
+    "window_seconds": 300,
+    "category": "Initial access",
+    "technique_id": "T1078",
+    "technique_name": "Valid Accounts",
+    "tactic": "Initial access"
+  }
+}

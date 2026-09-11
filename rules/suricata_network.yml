@@ -1,0 +1,31 @@
+{
+  "title": "Network intrusion signature",
+  "id": "suricata_network",
+  "description": "Network sensor reported a signature match.",
+  "author": "SentinelAI",
+  "level": "high",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "suricata_alert"
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Signature false positives; technique is provisional and must be reviewed"
+  ],
+  "tags": [
+    "attack.t1071"
+  ],
+  "sentinel": {
+    "kind": "single",
+    "threshold": 1,
+    "window_seconds": 300,
+    "category": "Command and control",
+    "technique_id": "T1071",
+    "technique_name": "Application Layer Protocol",
+    "tactic": "Command and control"
+  }
+}

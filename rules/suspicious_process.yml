@@ -1,0 +1,37 @@
+{
+  "title": "Suspicious process execution",
+  "id": "suspicious_process",
+  "description": "Log record contains an encoded PowerShell or shell download execution pattern.",
+  "author": "SentinelAI",
+  "level": "high",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "process_start",
+      "message|contains": [
+        "-encodedcommand",
+        "-enc ",
+        "curl | sh",
+        "wget | bash"
+      ]
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Authorized administrator scripts"
+  ],
+  "tags": [
+    "attack.t1059"
+  ],
+  "sentinel": {
+    "kind": "single",
+    "threshold": 1,
+    "window_seconds": 300,
+    "category": "Execution",
+    "technique_id": "T1059",
+    "technique_name": "Command and Scripting Interpreter",
+    "tactic": "Execution"
+  }
+}

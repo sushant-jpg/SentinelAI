@@ -1,0 +1,37 @@
+{
+  "title": "Sensitive system file modified",
+  "id": "file_integrity",
+  "description": "A monitored identity or SSH configuration file changed.",
+  "author": "SentinelAI",
+  "level": "high",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "file_modified",
+      "file_path": [
+        "/etc/passwd",
+        "/etc/shadow",
+        "/etc/sudoers",
+        "/etc/ssh/sshd_config"
+      ]
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Approved configuration management; mapping is investigative context, not proof"
+  ],
+  "tags": [
+    "attack.t1098"
+  ],
+  "sentinel": {
+    "kind": "single",
+    "threshold": 1,
+    "window_seconds": 300,
+    "category": "Persistence",
+    "technique_id": "T1098",
+    "technique_name": "Account Manipulation",
+    "tactic": "Persistence"
+  }
+}

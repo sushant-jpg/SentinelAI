@@ -1,0 +1,31 @@
+{
+  "title": "Network port scan detected",
+  "id": "port_scan",
+  "description": "Connections to at least twenty distinct ports on one host.",
+  "author": "SentinelAI",
+  "level": "medium",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "connection"
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Authorized vulnerability scanners"
+  ],
+  "tags": [
+    "attack.t1046"
+  ],
+  "sentinel": {
+    "kind": "distinct_ports",
+    "threshold": 20,
+    "window_seconds": 120,
+    "category": "Discovery",
+    "technique_id": "T1046",
+    "technique_name": "Network Service Discovery",
+    "tactic": "Discovery"
+  }
+}

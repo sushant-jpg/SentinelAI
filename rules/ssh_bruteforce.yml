@@ -1,0 +1,31 @@
+{
+  "title": "SSH brute-force attempt",
+  "id": "ssh_bruteforce",
+  "description": "More than ten failed SSH logins from one source against one host.",
+  "author": "SentinelAI",
+  "level": "high",
+  "logsource": {
+    "product": "sentinelai"
+  },
+  "detection": {
+    "selection": {
+      "event_type": "ssh_failed"
+    },
+    "condition": "selection"
+  },
+  "falsepositives": [
+    "Misconfigured automation; authorized authentication testing"
+  ],
+  "tags": [
+    "attack.t1110"
+  ],
+  "sentinel": {
+    "kind": "count",
+    "threshold": 11,
+    "window_seconds": 300,
+    "category": "Credential access",
+    "technique_id": "T1110",
+    "technique_name": "Brute Force",
+    "tactic": "Credential access"
+  }
+}
