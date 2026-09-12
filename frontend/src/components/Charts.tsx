@@ -1,7 +1,180 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
-import type { Analytics, Count, Severity } from '../types'
-import { severityColors, Empty } from './ui'
-const tooltipStyle={background:'#172131',border:'1px solid #2a374c',borderRadius:8,color:'#e5edf8',fontSize:12}
-export function ActivityChart({data}:{data:Analytics['trend']}){return <div className="activity-chart" role="img" aria-label={`Alert activity: ${data.map(d=>`${d.date}: ${d.total}`).join(', ')}`}><ResponsiveContainer width="100%" height="100%"><AreaChart data={data} margin={{top:20,right:8,left:-24,bottom:0}}><defs><linearGradient id="activityFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3ee3ae" stopOpacity={0.24}/><stop offset="100%" stopColor="#3ee3ae" stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="var(--line)" vertical={false} strokeDasharray="3 5"/><XAxis dataKey="date" tickFormatter={v=>new Date(v+'T00:00:00').toLocaleDateString(undefined,{weekday:'short'})} axisLine={false} tickLine={false} tick={{fill:'#8190a6',fontSize:11}} dy={10}/><YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{fill:'#8190a6',fontSize:11}}/><Tooltip contentStyle={tooltipStyle}/><Area type="monotone" dataKey="total" name="Total alerts" stroke="#3ee3ae" strokeWidth={2.5} fill="url(#activityFill)"/><Area type="monotone" dataKey="critical" name="Critical" stroke="#fb7185" strokeWidth={1.5} fill="transparent" strokeDasharray="4 4"/></AreaChart></ResponsiveContainer></div>}
-export function SeverityChart({severity,total}:{severity:Analytics['severity'];total:number}){const data=Object.entries(severity).map(([name,value])=>({name,value}));return <div className="severity-chart"><div className="donut" role="img" aria-label={data.map(d=>`${d.name}: ${d.value}`).join(', ')}><ResponsiveContainer width="100%" height={180}><PieChart><Pie data={total?data:[{name:'informational',value:1}]} dataKey="value" innerRadius={62} outerRadius={78} paddingAngle={4} stroke="none" startAngle={90} endAngle={-270}>{(total?data:[{name:'informational',value:1}]).map(d=><Cell key={d.name} fill={severityColors[d.name as Severity]}/>)}</Pie><Tooltip contentStyle={tooltipStyle}/></PieChart></ResponsiveContainer><div className="donut-label"><strong>{total}</strong><span>Total alerts</span></div></div><div className="severity-legend">{data.map(d=><div key={d.name}><span><i style={{background:severityColors[d.name as Severity]}}/>{d.name}</span><strong>{d.value}</strong><small>{total?Math.round(d.value/total*100):0}%</small></div>)}</div></div>}
-export function Ranking({data,color='#3ee3ae'}:{data:Count[];color?:string}){return data.length?<div className="ranking">{data.map((item,index)=><div className="rank-row" key={item.name}><span className="rank-number">0{index+1}</span><div><div className="rank-label"><span>{item.name}</span><strong>{item.count}</strong></div><div className="rank-track"><i style={{width:`${item.count/Math.max(...data.map(d=>d.count))*100}%`,background:color}}/></div></div></div>)}</div>:<Empty text="Rankings appear when alerts are detected."/>}
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import type { Analytics, Count, Severity } from "../types";
+import { severityColors, Empty } from "./ui";
+const tooltipStyle = {
+  background: "#172131",
+  border: "1px solid #2a374c",
+  borderRadius: 8,
+  color: "#e5edf8",
+  fontSize: 12,
+};
+export function ActivityChart({ data }: { data: Analytics["trend"] }) {
+  return (
+    <div
+      className="activity-chart"
+      role="img"
+      aria-label={`Alert activity: ${data.map((d) => `${d.date}: ${d.total}`).join(", ")}`}
+    >
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart
+          data={data}
+          margin={{ top: 20, right: 8, left: -24, bottom: 0 }}
+        >
+          <defs>
+            <linearGradient id="activityFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3ee3ae" stopOpacity={0.24} />
+              <stop offset="100%" stopColor="#3ee3ae" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid
+            stroke="var(--line)"
+            vertical={false}
+            strokeDasharray="3 5"
+          />
+          <XAxis
+            dataKey="date"
+            tickFormatter={(v) =>
+              new Date(v + "T00:00:00").toLocaleDateString(undefined, {
+                weekday: "short",
+              })
+            }
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "#8190a6", fontSize: 11 }}
+            dy={10}
+          />
+          <YAxis
+            allowDecimals={false}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "#8190a6", fontSize: 11 }}
+          />
+          <Tooltip contentStyle={tooltipStyle} />
+          <Area
+            type="monotone"
+            dataKey="total"
+            name="Total alerts"
+            stroke="#3ee3ae"
+            strokeWidth={2.5}
+            fill="url(#activityFill)"
+          />
+          <Area
+            type="monotone"
+            dataKey="critical"
+            name="Critical"
+            stroke="#fb7185"
+            strokeWidth={1.5}
+            fill="transparent"
+            strokeDasharray="4 4"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+export function SeverityChart({
+  severity,
+  total,
+}: {
+  severity: Analytics["severity"];
+  total: number;
+}) {
+  const data = Object.entries(severity).map(([name, value]) => ({
+    name,
+    value,
+  }));
+  return (
+    <div className="severity-chart">
+      <div
+        className="donut"
+        role="img"
+        aria-label={data.map((d) => `${d.name}: ${d.value}`).join(", ")}
+      >
+        <ResponsiveContainer width="100%" height={180}>
+          <PieChart>
+            <Pie
+              data={total ? data : [{ name: "informational", value: 1 }]}
+              dataKey="value"
+              innerRadius={62}
+              outerRadius={78}
+              paddingAngle={4}
+              stroke="none"
+              startAngle={90}
+              endAngle={-270}
+            >
+              {(total ? data : [{ name: "informational", value: 1 }]).map(
+                (d) => (
+                  <Cell
+                    key={d.name}
+                    fill={severityColors[d.name as Severity]}
+                  />
+                ),
+              )}
+            </Pie>
+            <Tooltip contentStyle={tooltipStyle} />
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="donut-label">
+          <strong>{total}</strong>
+          <span>Total alerts</span>
+        </div>
+      </div>
+      <div className="severity-legend">
+        {data.map((d) => (
+          <div key={d.name}>
+            <span>
+              <i style={{ background: severityColors[d.name as Severity] }} />
+              {d.name}
+            </span>
+            <strong>{d.value}</strong>
+            <small>{total ? Math.round((d.value / total) * 100) : 0}%</small>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+export function Ranking({
+  data,
+  color = "#3ee3ae",
+}: {
+  data: Count[];
+  color?: string;
+}) {
+  return data.length ? (
+    <div className="ranking">
+      {data.map((item, index) => (
+        <div className="rank-row" key={item.name}>
+          <span className="rank-number">0{index + 1}</span>
+          <div>
+            <div className="rank-label">
+              <span>{item.name}</span>
+              <strong>{item.count}</strong>
+            </div>
+            <div className="rank-track">
+              <i
+                style={{
+                  width: `${(item.count / Math.max(...data.map((d) => d.count))) * 100}%`,
+                  background: color,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <Empty text="Rankings appear when alerts are detected." />
+  );
+}

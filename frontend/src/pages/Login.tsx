@@ -1,8 +1,171 @@
-import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
-import { ArrowRight, Fingerprint, ShieldCheck, LockKeyhole, Activity } from 'lucide-react'
-import { LinkBrand } from '../components/Layout'
-import { ErrorBox } from '../components/ui'
-import { useAuth } from '../hooks/Auth'
-import { post } from '../services/api'
-export function Login(){const {user,login}=useAuth();const [register,setRegister]=useState(false),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[name,setName]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');if(user)return <Navigate to="/" replace/>;return <div className="login-screen"><section className="login-story"><LinkBrand/><div className="login-story-content"><span className="eyebrow">VISIBILITY. CONTEXT. CONFIDENCE.</span><h1>Every signal.<br/>A clearer picture.</h1><p>Your security operations, connected. Detect suspicious behavior, investigate with context, and respond with confidence.</p><div className="radar"><div/><div/><div/><ShieldCheck size={62}/><span className="radar-point one"/><span className="radar-point two"/><span className="radar-point three"/></div><div className="login-features"><span><Activity size={17}/>Explainable detections</span><span><LockKeyhole size={17}/>Defensive by design</span></div></div><small>SentinelAI / Security Operations & Threat Detection</small></section><section className="login-form-panel"><div className="login-form"><div className="fingerprint"><Fingerprint size={28}/></div><span className="eyebrow">YOUR COMMAND CENTER</span><h2>{register?'Create an account':'Welcome back'}</h2><p>{register?'New accounts receive read-only viewer access.':'Sign in to your SentinelAI workspace.'}</p><form onSubmit={async e=>{e.preventDefault();setBusy(true);setError('');try{if(register){await post('/auth/register',{name,email,password});setRegister(false);setMessage('Account created. Sign in to continue.')}else await login(email,password)}catch(e){setError((e as Error).message)}finally{setBusy(false)}}}>{register&&<label>Full name<input required minLength={2} maxLength={100} autoComplete="name" value={name} onChange={e=>setName(e.target.value)}/></label>}<label>Email address<input type="email" placeholder="you@organization.com" autoComplete="username" required value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Password<input type="password" placeholder={register?'12+ characters, letters and numbers':'Enter your password'} autoComplete={register?'new-password':'current-password'} minLength={register?12:1} maxLength={128} required value={password} onChange={e=>setPassword(e.target.value)}/></label><ErrorBox message={error}/>{message&&<p className="success-text" role="status">{message}</p>}<button className="button primary" disabled={busy}>{busy?'Please wait…':register?'Create account':'Sign in to workspace'}<ArrowRight size={17}/></button></form><p className="switch-auth">{register?'Already have an account?':'New to the workspace?'} <button className="text-button" onClick={()=>{setRegister(!register);setError('');setMessage('')}}>{register?'Sign in':'Create account'}</button></p><div className="login-note"><ShieldCheck size={16}/><span>For authorized defensive monitoring.<br/>Use the administrator credentials from your local .env file.</span></div></div></section></div>}
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import {
+  ArrowRight,
+  Fingerprint,
+  ShieldCheck,
+  LockKeyhole,
+  Activity,
+} from "lucide-react";
+import { LinkBrand } from "../components/Layout";
+import { ErrorBox } from "../components/ui";
+import { useAuth } from "../hooks/Auth";
+import { post } from "../services/api";
+export function Login() {
+  const { user, login } = useAuth();
+  const [register, setRegister] = useState(false),
+    [email, setEmail] = useState(""),
+    [password, setPassword] = useState(""),
+    [name, setName] = useState(""),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState(""),
+    [message, setMessage] = useState("");
+  if (user) return <Navigate to="/" replace />;
+  return (
+    <div className="login-screen">
+      <section className="login-story">
+        <LinkBrand />
+        <div className="login-story-content">
+          <span className="eyebrow">VISIBILITY. CONTEXT. CONFIDENCE.</span>
+          <h1>
+            Every signal.
+            <br />A clearer picture.
+          </h1>
+          <p>
+            Your security operations, connected. Detect suspicious behavior,
+            investigate with context, and respond with confidence.
+          </p>
+          <div className="radar">
+            <div />
+            <div />
+            <div />
+            <ShieldCheck size={62} />
+            <span className="radar-point one" />
+            <span className="radar-point two" />
+            <span className="radar-point three" />
+          </div>
+          <div className="login-features">
+            <span>
+              <Activity size={17} />
+              Explainable detections
+            </span>
+            <span>
+              <LockKeyhole size={17} />
+              Defensive by design
+            </span>
+          </div>
+        </div>
+        <small>SentinelAI / Security Operations & Threat Detection</small>
+      </section>
+      <section className="login-form-panel">
+        <div className="login-form">
+          <div className="fingerprint">
+            <Fingerprint size={28} />
+          </div>
+          <span className="eyebrow">YOUR COMMAND CENTER</span>
+          <h2>{register ? "Create an account" : "Welcome back"}</h2>
+          <p>
+            {register
+              ? "New accounts receive read-only viewer access."
+              : "Sign in to your SentinelAI workspace."}
+          </p>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setBusy(true);
+              setError("");
+              try {
+                if (register) {
+                  await post("/auth/register", { name, email, password });
+                  setRegister(false);
+                  setMessage("Account created. Sign in to continue.");
+                } else await login(email, password);
+              } catch (e) {
+                setError((e as Error).message);
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {register && (
+              <label>
+                Full name
+                <input
+                  required
+                  minLength={2}
+                  maxLength={100}
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+            )}
+            <label>
+              Email address
+              <input
+                type="email"
+                placeholder="you@organization.com"
+                autoComplete="username"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <label>
+              Password
+              <input
+                type="password"
+                placeholder={
+                  register
+                    ? "12+ characters, letters and numbers"
+                    : "Enter your password"
+                }
+                autoComplete={register ? "new-password" : "current-password"}
+                minLength={register ? 12 : 1}
+                maxLength={128}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </label>
+            <ErrorBox message={error} />
+            {message && (
+              <p className="success-text" role="status">
+                {message}
+              </p>
+            )}
+            <button className="button primary" disabled={busy}>
+              {busy
+                ? "Please wait…"
+                : register
+                  ? "Create account"
+                  : "Sign in to workspace"}
+              <ArrowRight size={17} />
+            </button>
+          </form>
+          <p className="switch-auth">
+            {register ? "Already have an account?" : "New to the workspace?"}{" "}
+            <button
+              className="text-button"
+              onClick={() => {
+                setRegister(!register);
+                setError("");
+                setMessage("");
+              }}
+            >
+              {register ? "Sign in" : "Create account"}
+            </button>
+          </p>
+          <div className="login-note">
+            <ShieldCheck size={16} />
+            <span>
+              For authorized defensive monitoring.
+              <br />
+              Use the administrator credentials from your local .env file.
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

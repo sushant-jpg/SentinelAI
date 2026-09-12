@@ -5,11 +5,11 @@ from app.models.entities import Event, Asset
 from app.detection.engine import detect
 
 
-def ingest(db, events, origin='api'):
+def ingest(db, events, origin="api"):
     accepted, duplicates, alert_ids = 0, 0, []
     # Serialize batches on PostgreSQL so correlation and replay suppression are atomic.
-    if db.bind.dialect.name == 'postgresql':
-        db.execute(text('SELECT pg_advisory_xact_lock(7310942)'))
+    if db.bind.dialect.name == "postgresql":
+        db.execute(text("SELECT pg_advisory_xact_lock(7310942)"))
     for item in sorted(events, key=lambda e: (e.timestamp, e.event_id)):
         if db.get(Event, item.event_id):
             duplicates += 1
@@ -26,7 +26,7 @@ def ingest(db, events, origin='api'):
         db.flush()
         alert_ids.extend(alert.alert_id for alert in detect(db, event))
         accepted += 1
-    return {'accepted': accepted, 'duplicates': duplicates, 'alerts_created': len(alert_ids), 'alert_ids': alert_ids}
+    return {"accepted": accepted, "duplicates": duplicates, "alerts_created": len(alert_ids), "alert_ids": alert_ids}
 
 
 def stable_id(payload: str) -> str:

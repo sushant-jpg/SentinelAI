@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-01-15T12:01:00.000+00:00",
+  "id": "sentinel-demo-file-change-001",
+  "rule": {
+    "id": "550",
+    "level": 9,
+    "description": "SIMULATED integrity checksum changed",
+    "groups": ["ossec", "syscheck"]
+  },
+  "agent": {"id": "001", "name": "lab-ubuntu", "ip": "10.20.0.20"},
+  "syscheck": {"path": "/etc/ssh/sshd_config"}
+}
